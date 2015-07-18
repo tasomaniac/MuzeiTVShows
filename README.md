@@ -1,5 +1,5 @@
-MuzeiTVShows
-============
+Muzei TV Shows
+==============
 
 What
 ----

@@ -1,0 +1,52 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.3.0-beta4'
+        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.6'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.0'
+
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
+apply plugin: 'com.github.ben-manes.versions'
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+}
+
+ext {
+    isTravis = "true".equals(System.getenv("TRAVIS"))
+    preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
+
+    versionMajor = 1
+    versionMinor = 0
+    versionPatch = 0
+    versionBuild = 0
+
+    compileSdkVersion = 22
+    buildToolsVersion = "22.0.1"
+
+    supportLibVersion = "22.2.1"
+    daggerVersion = "2.0.1"
+    playServicesVersion = "7.5.0"
+
+    supportLib = "com.android.support:support-v4:$supportLibVersion"
+    supportLibAppCompat = "com.android.support:appcompat-v7:$supportLibVersion"
+    supportLibAnnotations = "com.android.support:support-annotations:$supportLibVersion"
+    playServicesAnalytics = "com.google.android.gms:play-services-analytics:$playServicesVersion"
+
+    dagger = "com.google.dagger:dagger:$daggerVersion"
+    daggerCompiler = "com.google.dagger:dagger-compiler:$daggerVersion"
+    javaxAnnotation = 'org.glassfish:javax.annotation:10.0-b28'
+}
