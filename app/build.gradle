@@ -26,6 +26,8 @@ android {
         buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
 
+        buildConfigField "String", "ANALYTICS_KEY", "\"\""
+
         resConfigs "en"
     }
 
@@ -95,11 +97,6 @@ dependencies {
     compile rootProject.ext.dagger
     apt rootProject.ext.daggerCompiler
     provided rootProject.ext.javaxAnnotation
-
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
-    compile 'com.squareup.okio:okio:1.5.0'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
 
     compile 'com.jakewharton.timber:timber:3.1.0'
 

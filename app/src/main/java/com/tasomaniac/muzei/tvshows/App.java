@@ -5,11 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.squareup.okhttp.OkHttpClient;
-import com.tasomaniac.muzei.tvshows.util.IOUtil;
 
-import java.util.concurrent.TimeUnit;
-
+import hugo.weaving.DebugLog;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -18,15 +15,11 @@ import timber.log.Timber;
  */
 public class App extends Application {
 
-    private OkHttpClient okHttpClient;
+    private AppComponent component;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        okHttpClient = new OkHttpClient();
-        okHttpClient.setConnectTimeout(IOUtil.DEFAULT_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
-        okHttpClient.setReadTimeout(IOUtil.DEFAULT_READ_TIMEOUT, TimeUnit.MILLISECONDS);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
@@ -34,16 +27,24 @@ public class App extends Application {
             Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashReportingTree());
         }
+
+
+        buildComponentAndInject();
     }
 
-    public OkHttpClient getOkHttpClient() {
-        return okHttpClient;
+    @DebugLog // Extracted for debugging.
+    public void buildComponentAndInject() {
+        component = AppComponent.Initializer.init(this);
+        component.inject(this);
+    }
+
+    public AppComponent component() {
+        return component;
     }
 
     public static App get(Context context) {
         return (App) context.getApplicationContext();
     }
-
 
     /** A tree which logs important information for crash reporting. */
     private static class CrashReportingTree extends Timber.Tree {
