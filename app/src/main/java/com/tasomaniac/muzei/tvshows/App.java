@@ -28,7 +28,6 @@ public class App extends Application {
             Timber.plant(new CrashReportingTree());
         }
 
-
         buildComponentAndInject();
     }
 
