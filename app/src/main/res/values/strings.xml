@@ -3,4 +3,8 @@
 
     <string name="source_name">TV Shows</string>
     <string name="source_description">Your Favorite TV Shows</string>
+
+    <string name="daily">Daily</string>
+    <string name="now">now</string>
+    <string name="today">today</string>
 </resources>
