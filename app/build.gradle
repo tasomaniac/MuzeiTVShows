@@ -52,7 +52,7 @@ android {
         }
 
         release {
-            minifyEnabled true
+            minifyEnabled !rootProject.ext.isTravis
             zipAlignEnabled true
             shrinkResources true
             debuggable false

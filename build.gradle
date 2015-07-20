@@ -29,10 +29,10 @@ ext {
     isTravis = "true".equals(System.getenv("TRAVIS"))
     preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
-    versionMajor = 1
-    versionMinor = 0
+    versionMajor = 0
+    versionMinor = 1
     versionPatch = 0
-    versionBuild = 0
+    versionBuild = 1
 
     compileSdkVersion = 22
     buildToolsVersion = "22.0.1"
