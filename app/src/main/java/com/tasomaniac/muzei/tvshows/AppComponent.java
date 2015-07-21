@@ -1,6 +1,7 @@
 package com.tasomaniac.muzei.tvshows;
 
 import com.tasomaniac.muzei.tvshows.data.DataModule;
+import com.tasomaniac.muzei.tvshows.ui.SettingsFragment;
 
 import javax.inject.Singleton;
 
@@ -13,6 +14,8 @@ public interface AppComponent {
     void inject(App app);
 
     void inject(SeriesGuideArtSource artSource);
+
+    void inject(SettingsFragment fragment);
 
     /**
      * An initializer that creates the graph from an application.

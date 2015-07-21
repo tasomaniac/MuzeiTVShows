@@ -19,7 +19,8 @@
   <string name="pref_title_integrations">Integrations</string>
   <string name="pref_key_seriesguide_integration">pref_seriesguide_integration</string>
   <string name="pref_title_seriesguide_integration">Series Guide Integration</string>
-  <string name="pref_summary_seriesguide_installed">Open Series Guide to select and track TV Shows and Movies.</string>
+  <string name="pref_summary_seriesguide_installed">Open Series Guide to change your selected TV Shows.</string>
+  <string name="pref_summary_seriesguide_not_setup">You must add TV Shows to Series Guide for this application to show their posters as wallpapers.</string>
   <string name="pref_summary_seriesguide_not_installed">Series Guide app must be installed to get TV Shows and Movies.</string>
 
   <string name="pref_key_muzei_integration">pref_muzei_integration</string>

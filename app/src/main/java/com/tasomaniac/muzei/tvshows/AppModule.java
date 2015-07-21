@@ -2,6 +2,7 @@ package com.tasomaniac.muzei.tvshows;
 
 import android.app.Application;
 import android.content.ContentResolver;
+import android.content.pm.PackageManager;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -30,9 +31,12 @@ final class AppModule {
         return app;
     }
 
-    @Provides @Singleton
-    ContentResolver provideContentResolver() {
+    @Provides @Singleton ContentResolver provideContentResolver() {
         return app.getContentResolver();
+    }
+
+    @Provides @Singleton PackageManager providePackageManager() {
+        return app.getPackageManager();
     }
 
     @Provides @Singleton Analytics provideAnalytics() {
