@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name" translatable="false">Muzei TV Shows</string>
+  <string name="app_name">Muzei TV Shows</string>
 
   <string name="source_name">TV Shows</string>
   <string name="source_description">Your Favorite TV Shows</string>
