@@ -3,21 +3,27 @@
 
   <string name="source_name">TV Shows</string>
   <string name="source_description">Your Favorite TV Shows</string>
+  <string name="settings">Settings</string>
 
   <string name="daily">Daily</string>
   <string name="now">now</string>
   <string name="today">today</string>
+
+  <string name="pref_key_settings">pref_settings</string>
+  <string name="pref_titile_settings">@string/settings</string>
+  <string name="pref_key_only_unwatched" translatable="false">pref_only_unwatched</string>
   <string name="pref_title_only_unwatched">Unwatched Only</string>
   <string name="pref_summary_on_only_unwatched">Display unwatched episodes only</string>
   <string name="pref_summary_off_only_unwatched">Display posters from all episodes</string>
 
-  <string name="pref_key_only_unwatched" translatable="false">pref_only_unwatched</string>
   <string name="pref_title_integrations">Integrations</string>
   <string name="pref_key_seriesguide_integration">pref_seriesguide_integration</string>
   <string name="pref_title_seriesguide_integration">Series Guide Integration</string>
+  <string name="pref_summary_seriesguide_installed">Open Series Guide to select and track TV Shows and Movies.</string>
+  <string name="pref_summary_seriesguide_not_installed">Series Guide app must be installed to get TV Shows and Movies.</string>
+
   <string name="pref_key_muzei_integration">pref_muzei_integration</string>
   <string name="pref_title_muzei_integration">Muzei App Integration</string>
-  <string name="pref_summary_muzei_not_installed">Muzei Wallpaper app should be installed to set your wallpaper.</string>
   <string name="pref_summart_muzei_installed">Open Muzei settings to select "TV Shows" as your source.</string>
-  <string name="pref_key_settings">pref_settings</string>
+  <string name="pref_summary_muzei_not_installed">Muzei Wallpaper app must be installed to set your wallpaper.</string>
 </resources>

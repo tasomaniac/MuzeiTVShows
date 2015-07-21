@@ -25,6 +25,9 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +38,12 @@ public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String APPLICATION_ID_MUZEI = "net.nurik.roman.muzei";
     private static final String APPLICATION_ID_SERIESGUIDE = "com.battlelancer.seriesguide";
+    private static final String PROVIDER_SERIES_GUIDE = "com.battlelancer.seriesguide.provider.SeriesGuideProvider";
+
+    private static final Intent INTENT_PLAY_STORE_MUZEI = new Intent(Intent.ACTION_VIEW,
+            Uri.parse("market://details?id=" + APPLICATION_ID_MUZEI));
+    private static final Intent INTENT_PLAY_STORE_SERIESGUIDE = new Intent(Intent.ACTION_VIEW,
+            Uri.parse("market://details?id=" + APPLICATION_ID_SERIESGUIDE));
 
     public SettingsFragment() {
     }
@@ -52,10 +61,18 @@ public class SettingsFragment extends PreferenceFragment
 //        bindPreferenceSummaryToValue(
 //                findPreference(getString(R.string.pref_key_only_unwatched)));
 
-        setupMuzeiIntegrations(getString(R.string.pref_key_muzei_integration));
+        adjustPreferenceIfTroublesomeIntent(R.string.pref_key_muzei_integration,
+                INTENT_PLAY_STORE_MUZEI,
+                R.string.pref_summary_muzei_not_installed);
+
+        adjustPreferenceIfTroublesomeIntent(R.string.pref_key_seriesguide_integration,
+                INTENT_PLAY_STORE_SERIESGUIDE,
+                R.string.pref_summary_seriesguide_not_installed);
     }
 
-    private void setupMuzeiIntegrations(String key) {
+    private void adjustPreferenceIfTroublesomeIntent(@StringRes int key,
+                                        @NonNull Intent alternativeIntent,
+                                        @StringRes int alternativeSummary) {
         Preference pref = findPreference(key);
         if (pref == null) {
             return;
@@ -64,10 +81,19 @@ public class SettingsFragment extends PreferenceFragment
         Intent intent = pref.getIntent();
         if (intent != null
                 && getActivity().getPackageManager().resolveActivity(intent, 0) == null) {
-            pref.setIntent(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("market://details?id=net.nurik.roman.muzei")));
-            pref.setSummary(R.string.pref_summary_muzei_not_installed);
+            pref.setIntent(alternativeIntent);
+            pref.setSummary(alternativeSummary);
+
+            final Preference settingPref = findPreference(R.string.pref_key_settings);
+            if (settingPref != null) {
+                settingPref.setEnabled(false);
+            }
         }
+    }
+
+    @Nullable
+    public Preference findPreference(@StringRes int keyResource) {
+        return findPreference(getString(keyResource));
     }
 
     @Override
@@ -85,7 +111,7 @@ public class SettingsFragment extends PreferenceFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_simple_prefs, container, false);
     }

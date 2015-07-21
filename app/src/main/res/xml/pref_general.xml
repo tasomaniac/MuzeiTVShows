@@ -16,7 +16,9 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <PreferenceCategory android:key="@string/pref_key_settings" android:title="Settings">
+  <PreferenceCategory
+    android:key="@string/pref_key_settings"
+    android:title="@string/settings">
     <CheckBoxPreference
       android:defaultValue="false"
       android:key="@string/pref_key_only_unwatched"
@@ -31,18 +33,22 @@
     <Preference
       android:key="@string/pref_key_muzei_integration"
       android:persistent="false"
-      android:title="@string/pref_title_muzei_integration"
-      android:summary="@string/pref_summart_muzei_installed">
+      android:summary="@string/pref_summart_muzei_installed"
+      android:title="@string/pref_title_muzei_integration">
       <intent
-        android:targetPackage="net.nurik.roman.muzei"
-        android:targetClass="com.google.android.apps.muzei.settings.SettingsActivity"/>
+        android:targetClass="com.google.android.apps.muzei.settings.SettingsActivity"
+        android:targetPackage="net.nurik.roman.muzei"/>
     </Preference>
 
     <!-- Series Guide App Check Preference -->
     <Preference
       android:key="@string/pref_key_seriesguide_integration"
       android:persistent="false"
-      android:title="@string/pref_title_seriesguide_integration"/>
+      android:summary="@string/pref_summary_seriesguide_installed"
+      android:title="@string/pref_title_seriesguide_integration">
+      <intent
+        android:action="com.battlelancer.seriesguide.api.action.VIEW_EPISODE"/>
+    </Preference>
 
   </PreferenceCategory>
 
