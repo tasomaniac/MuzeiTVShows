@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.tasomaniac.muzei.tvshows.R;
 import com.tasomaniac.muzei.tvshows.data.prefs.BooleanPreference;
 
 import javax.inject.Singleton;
@@ -22,9 +23,11 @@ public final class DataModule {
     }
 
     @Provides @Singleton @OnlyUnwatched
-    BooleanPreference provideOnlyUnwatchedPreference(
+    BooleanPreference provideOnlyUnwatchedPreference(Application app,
             SharedPreferences prefs) {
-        return new BooleanPreference(prefs, "show-countdown", DEFAULT_ONLY_UNWATCHED);
+        return new BooleanPreference(prefs,
+                app.getString(R.string.pref_key_only_unwatched),
+                DEFAULT_ONLY_UNWATCHED);
     }
 
     @Provides @OnlyUnwatched Boolean provideOnlyUnwatched(@OnlyUnwatched BooleanPreference pref) {

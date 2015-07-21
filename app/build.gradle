@@ -104,7 +104,6 @@ dependencies {
 
     compile 'com.google.android.apps.muzei:muzei-api:2.0'
 
-    // Crashlytics Kit
     compile('com.crashlytics.sdk.android:crashlytics:2.4.0@aar') {
         transitive = true
     }
