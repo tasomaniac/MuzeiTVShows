@@ -10,7 +10,7 @@
   <string name="today">today</string>
 
   <string name="pref_key_settings">pref_settings</string>
-  <string name="pref_titile_settings">@string/settings</string>
+  <string name="pref_title_settings">@string/settings</string>
   <string name="pref_key_only_unwatched" translatable="false">pref_only_unwatched</string>
   <string name="pref_title_only_unwatched">Unwatched Only</string>
   <string name="pref_summary_on_only_unwatched">Display unwatched episodes only</string>

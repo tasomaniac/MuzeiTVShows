@@ -18,7 +18,7 @@
 
   <PreferenceCategory
     android:key="@string/pref_key_settings"
-    android:title="@string/settings">
+    android:title="@string/pref_title_settings">
     <CheckBoxPreference
       android:defaultValue="false"
       android:key="@string/pref_key_only_unwatched"
