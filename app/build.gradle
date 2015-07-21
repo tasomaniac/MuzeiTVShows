@@ -46,13 +46,14 @@ android {
 
     buildTypes {
         debug {
+            ext.enableCrashlytics = false
             applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
             versionNameSuffix "-debug"
         }
 
         release {
-            minifyEnabled !rootProject.ext.isTravis
+            minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
             debuggable false

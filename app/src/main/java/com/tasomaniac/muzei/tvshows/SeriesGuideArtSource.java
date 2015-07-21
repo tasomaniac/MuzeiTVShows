@@ -83,7 +83,6 @@ public class SeriesGuideArtSource extends RemoteMuzeiArtSource {
         super.onCreate();
         App.get(this).component().inject(this);
         setUserCommands(BUILTIN_COMMAND_ID_NEXT_ARTWORK);
-
     }
 
     @Override
@@ -91,11 +90,16 @@ public class SeriesGuideArtSource extends RemoteMuzeiArtSource {
 
         //TODO Check if the user have Series Guide installed.
         //TODO Check if the user has Series Guide Content Provider setted up.
+        onTryUpcomingEpisodesUpdate();
 
+
+        scheduleUpdate(System.currentTimeMillis() + ROTATE_TIME_MILLIS);
+    }
+
+    private void onTryUpcomingEpisodesUpdate() {
         // go an hour back in time, so episodes move to recent one hour late
         long recentThreshold = System.currentTimeMillis() - DateUtils.HOUR_IN_MILLIS;
-
-        long timeThreshold = Long.MAX_VALUE;
+        long timeThreshold = recentThreshold + DateUtils.DAY_IN_MILLIS;
 
         StringBuilder query = new StringBuilder(EpisodeQuery.QUERY_UPCOMING);
         String sortOrder = EpisodeQuery.SORTING_UPCOMING;
@@ -116,7 +120,15 @@ public class SeriesGuideArtSource extends RemoteMuzeiArtSource {
         // Ensure there are episodes to show
         // TODO make the user to install SeriesGuide, setup and have some shows in it.
         if (upcomingEpisodes != null) {
-            if (upcomingEpisodes.moveToFirst()) {
+            while (upcomingEpisodes.moveToNext()) {
+
+                String currentToken = (getCurrentArtwork() != null) ?
+                        getCurrentArtwork().getToken() : null;
+                String upcomingToken = upcomingEpisodes.getString(EpisodeQuery._ID);
+
+                if (upcomingToken.equals(currentToken)) {
+                    continue;
+                }
 
                 // Ensure those episodes are within the user set time frame
                 long releaseTime = upcomingEpisodes
@@ -148,14 +160,14 @@ public class SeriesGuideArtSource extends RemoteMuzeiArtSource {
                         .title(title)
                         .byline(byline.toString())
                         .imageUri(getPosterImageUri(upcomingEpisodes))
-                        .token(upcomingEpisodes.getString(EpisodeQuery._ID))
+                        .token(upcomingToken)
                         .viewIntent(getViewIntent())
                         .build());
+
+                break;
             }
             upcomingEpisodes.close();
         }
-
-        scheduleUpdate(System.currentTimeMillis() + ROTATE_TIME_MILLIS);
     }
 
     @NonNull
