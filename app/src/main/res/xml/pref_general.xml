@@ -16,27 +16,34 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--<ListPreference-->
-        <!--android:key="pref_daydream_animation"-->
-        <!--android:entryValues="@array/pref_daydream_animation_values"-->
-        <!--android:entries="@array/pref_daydream_animation_display_names"-->
-        <!--android:title="@string/pref_daydream_animation_title"-->
-        <!--android:defaultValue="pendulum"-->
-        <!--android:negativeButtonText="@null"-->
-        <!--android:positiveButtonText="@null" />-->
-
+  <PreferenceCategory android:key="@string/pref_key_settings" android:title="Settings">
     <CheckBoxPreference
-        android:key="@string/pref_key_only_unwatched"
-        android:title="@string/pref_title_only_unwatched"
-        android:summaryOn="@string/pref_summary_on_only_unwatched"
-        android:summary="@string/pref_summary_off_only_unwatched"
-        android:defaultValue="false" />
+      android:defaultValue="false"
+      android:key="@string/pref_key_only_unwatched"
+      android:summary="@string/pref_summary_off_only_unwatched"
+      android:summaryOn="@string/pref_summary_on_only_unwatched"
+      android:title="@string/pref_title_only_unwatched"/>
+  </PreferenceCategory>
 
-    <!--<Preference-->
-        <!--android:persistent="false"-->
-        <!--android:key="pref_daydream_system_settings"-->
-        <!--android:title="@string/pref_daydream_system_settings_title">-->
-        <!--<intent android:action="android.settings.DREAM_SETTINGS" />-->
-    <!--</Preference>-->
+  <PreferenceCategory android:title="@string/pref_title_integrations">
+
+    <!-- Muzei App Check Preference-->
+    <Preference
+      android:key="@string/pref_key_muzei_integration"
+      android:persistent="false"
+      android:title="@string/pref_title_muzei_integration"
+      android:summary="@string/pref_summart_muzei_installed">
+      <intent
+        android:targetPackage="net.nurik.roman.muzei"
+        android:targetClass="com.google.android.apps.muzei.settings.SettingsActivity"/>
+    </Preference>
+
+    <!-- Series Guide App Check Preference -->
+    <Preference
+      android:key="@string/pref_key_seriesguide_integration"
+      android:persistent="false"
+      android:title="@string/pref_title_seriesguide_integration"/>
+
+  </PreferenceCategory>
 
 </PreferenceScreen>

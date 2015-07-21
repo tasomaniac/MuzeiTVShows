@@ -17,7 +17,9 @@
 package com.tasomaniac.muzei.tvshows.ui;
 
 import android.app.backup.BackupManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -31,7 +33,8 @@ import com.tasomaniac.muzei.tvshows.R;
 
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String PREF_DAYDREAM_SYSTEM_SETTINGS = "pref_daydream_system_settings";
+    private static final String APPLICATION_ID_MUZEI = "net.nurik.roman.muzei";
+    private static final String APPLICATION_ID_SERIESGUIDE = "com.battlelancer.seriesguide";
 
     public SettingsFragment() {
     }
@@ -48,6 +51,23 @@ public class SettingsFragment extends PreferenceFragment
         // to reflect the new value, per the Android Design guidelines.
 //        bindPreferenceSummaryToValue(
 //                findPreference(getString(R.string.pref_key_only_unwatched)));
+
+        setupMuzeiIntegrations(getString(R.string.pref_key_muzei_integration));
+    }
+
+    private void setupMuzeiIntegrations(String key) {
+        Preference pref = findPreference(key);
+        if (pref == null) {
+            return;
+        }
+
+        Intent intent = pref.getIntent();
+        if (intent != null
+                && getActivity().getPackageManager().resolveActivity(intent, 0) == null) {
+            pref.setIntent(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=net.nurik.roman.muzei")));
+            pref.setSummary(R.string.pref_summary_muzei_not_installed);
+        }
     }
 
     @Override

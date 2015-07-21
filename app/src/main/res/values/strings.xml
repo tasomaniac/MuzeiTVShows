@@ -12,4 +12,12 @@
   <string name="pref_summary_off_only_unwatched">Display posters from all episodes</string>
 
   <string name="pref_key_only_unwatched" translatable="false">pref_only_unwatched</string>
+  <string name="pref_title_integrations">Integrations</string>
+  <string name="pref_key_seriesguide_integration">pref_seriesguide_integration</string>
+  <string name="pref_title_seriesguide_integration">Series Guide Integration</string>
+  <string name="pref_key_muzei_integration">pref_muzei_integration</string>
+  <string name="pref_title_muzei_integration">Muzei App Integration</string>
+  <string name="pref_summary_muzei_not_installed">Muzei Wallpaper app should be installed to set your wallpaper.</string>
+  <string name="pref_summart_muzei_installed">Open Muzei settings to select "TV Shows" as your source.</string>
+  <string name="pref_key_settings">pref_settings</string>
 </resources>
