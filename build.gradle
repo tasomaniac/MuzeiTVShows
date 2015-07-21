@@ -44,6 +44,7 @@ ext {
     supportLib = "com.android.support:support-v4:$supportLibVersion"
     supportLibAppCompat = "com.android.support:appcompat-v7:$supportLibVersion"
     supportLibAnnotations = "com.android.support:support-annotations:$supportLibVersion"
+    supportLibDesign = "com.android.support:design:$supportLibVersion"
     playServicesAnalytics = "com.google.android.gms:play-services-analytics:$playServicesVersion"
 
     dagger = "com.google.dagger:dagger:$daggerVersion"

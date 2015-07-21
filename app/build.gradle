@@ -89,15 +89,16 @@ play {
 }
 
 dependencies {
-    compile rootProject.ext.supportLib
-    compile rootProject.ext.supportLibAppCompat
-    compile rootProject.ext.supportLibAnnotations
+    compile supportLib
+    compile supportLibAppCompat
+    compile supportLibDesign
+    compile supportLibAnnotations
 
-    compile rootProject.ext.playServicesAnalytics
+    compile playServicesAnalytics
 
-    compile rootProject.ext.dagger
-    apt rootProject.ext.daggerCompiler
-    provided rootProject.ext.javaxAnnotation
+    compile dagger
+    apt daggerCompiler
+    provided javaxAnnotation
 
     compile 'com.jakewharton.timber:timber:3.1.0'
 
