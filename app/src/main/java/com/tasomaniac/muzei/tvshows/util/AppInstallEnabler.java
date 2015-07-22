@@ -54,9 +54,7 @@ public final class AppInstallEnabler {
 
     public void resume() {
 
-        // Bluetooth state is not sticky, so set it manually
         handleStateChanged();
-
         mContext.registerReceiver(mReceiver, mIntentFilter);
     }
 

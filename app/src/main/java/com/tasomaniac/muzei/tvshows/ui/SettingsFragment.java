@@ -34,11 +34,13 @@ import android.widget.ListView;
 
 import com.tasomaniac.muzei.tvshows.R;
 import com.tasomaniac.muzei.tvshows.util.AppInstallEnabler;
+import com.tasomaniac.muzei.tvshows.util.ContentProviderEnabler;
 
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     AppInstallEnabler appInstallEnabler;
+    ContentProviderEnabler contentProviderEnabler;
 
     public SettingsFragment() {
     }
@@ -56,9 +58,12 @@ public class SettingsFragment extends PreferenceFragment
 //        bindPreferenceSummaryToValue(
 //                findPreference(getString(R.string.pref_key_only_unwatched)));
 
+        IntegrationPreference seriesguidePref =
+                (IntegrationPreference) findPreference(R.string.pref_key_seriesguide_integration);
         appInstallEnabler = new AppInstallEnabler(getActivity(),
                 (IntegrationPreference) findPreference(R.string.pref_key_muzei_integration),
-                (IntegrationPreference) findPreference(R.string.pref_key_seriesguide_integration));
+                seriesguidePref);
+        contentProviderEnabler = new ContentProviderEnabler(getActivity(), seriesguidePref);
     }
 
     @Nullable
@@ -71,9 +76,8 @@ public class SettingsFragment extends PreferenceFragment
         super.onResume();
         getPreferenceManager().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
-        if (appInstallEnabler != null) {
-            appInstallEnabler.resume();
-        }
+        appInstallEnabler.resume();
+        contentProviderEnabler.resume();
     }
 
     @Override
@@ -81,9 +85,8 @@ public class SettingsFragment extends PreferenceFragment
         super.onPause();
         getPreferenceManager().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
-        if (appInstallEnabler != null) {
-            appInstallEnabler.pause();
-        }
+        appInstallEnabler.pause();
+        contentProviderEnabler.pause();
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -24,6 +25,8 @@ import com.tasomaniac.muzei.tvshows.App;
 import com.tasomaniac.muzei.tvshows.R;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 public class IntegrationPreference extends CheckBoxPreference {
 
@@ -83,6 +86,10 @@ public class IntegrationPreference extends CheckBoxPreference {
                 checkState();
             }
         });
+    }
+
+    public String getExpectedContentUri() {
+        return expectedContentUri;
     }
 
     public void checkState() {
@@ -160,6 +167,9 @@ public class IntegrationPreference extends CheckBoxPreference {
             cursor = contentResolver.query(uri,
                     new String[]{BaseColumns._ID}, null, null, null);
             return cursor == null || cursor.getCount() == 0;
+        } catch (SQLiteException e) {
+            Timber.e(e, "Error accessing Series Guide database");
+            return true;
         } finally {
             if (cursor != null) {
                 cursor.close();
