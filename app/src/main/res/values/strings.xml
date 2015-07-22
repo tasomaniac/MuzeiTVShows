@@ -1,8 +1,8 @@
 <resources>
-  <string name="app_name">Muzei TV Shows</string>
+  <string name="app_name">Show Posters</string>
 
-  <string name="source_name">TV Shows</string>
-  <string name="source_description">Your Favorite TV Shows</string>
+  <string name="source_name">TV Show Posters</string>
+  <string name="source_description">Posters and pictures from your favorite TV Shows</string>
   <string name="settings">Settings</string>
 
   <string name="daily">Daily</string>

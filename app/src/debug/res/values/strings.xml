@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Muzei TV Shows Debug</string>
+    <string name="app_name">Show Posters Debug</string>
 
-    <string name="source_name">TV Shows Debug</string>
+    <string name="source_name">TV Show Posters Debug</string>
 </resources>
