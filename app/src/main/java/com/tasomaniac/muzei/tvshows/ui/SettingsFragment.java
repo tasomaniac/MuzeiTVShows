@@ -33,14 +33,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.tasomaniac.muzei.tvshows.R;
-import com.tasomaniac.muzei.tvshows.util.AppInstallEnabler;
-import com.tasomaniac.muzei.tvshows.util.ContentProviderEnabler;
 
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    AppInstallEnabler appInstallEnabler;
-    ContentProviderEnabler contentProviderEnabler;
+    private IntegrationPreference muzeiPref;
+    private IntegrationPreference seriesguidePref;
 
     public SettingsFragment() {
     }
@@ -58,12 +56,8 @@ public class SettingsFragment extends PreferenceFragment
 //        bindPreferenceSummaryToValue(
 //                findPreference(getString(R.string.pref_key_only_unwatched)));
 
-        IntegrationPreference seriesguidePref =
-                (IntegrationPreference) findPreference(R.string.pref_key_seriesguide_integration);
-        appInstallEnabler = new AppInstallEnabler(getActivity(),
-                (IntegrationPreference) findPreference(R.string.pref_key_muzei_integration),
-                seriesguidePref);
-        contentProviderEnabler = new ContentProviderEnabler(getActivity(), seriesguidePref);
+        muzeiPref = (IntegrationPreference) findPreference(R.string.pref_key_muzei_integration);
+        seriesguidePref = (IntegrationPreference) findPreference(R.string.pref_key_seriesguide_integration);
     }
 
     @Nullable
@@ -76,8 +70,8 @@ public class SettingsFragment extends PreferenceFragment
         super.onResume();
         getPreferenceManager().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
-        appInstallEnabler.resume();
-        contentProviderEnabler.resume();
+        muzeiPref.resume();
+        seriesguidePref.resume();
     }
 
     @Override
@@ -85,8 +79,8 @@ public class SettingsFragment extends PreferenceFragment
         super.onPause();
         getPreferenceManager().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
-        appInstallEnabler.pause();
-        contentProviderEnabler.pause();
+        muzeiPref.pause();
+        seriesguidePref.pause();
     }
 
     @Override

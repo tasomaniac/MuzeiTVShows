@@ -27,7 +27,7 @@ import com.tasomaniac.muzei.tvshows.ui.IntegrationPreference;
 public final class AppInstallEnabler {
 
     private final Context mContext;
-    private IntegrationPreference[] mPrefs;
+    private IntegrationPreference mPref;
     private final IntentFilter mIntentFilter;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -40,9 +40,9 @@ public final class AppInstallEnabler {
     };
 
     public AppInstallEnabler(@NonNull Context context,
-                             @NonNull IntegrationPreference... prefs) {
+                             @NonNull IntegrationPreference pref) {
         mContext = context;
-        mPrefs = prefs;
+        mPref = pref;
 
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -63,11 +63,7 @@ public final class AppInstallEnabler {
     }
 
     void handleStateChanged() {
-        for (IntegrationPreference pref : mPrefs) {
-            if (pref != null) {
-                pref.checkState();
-            }
-        }
+        mPref.checkState();
     }
 
 }

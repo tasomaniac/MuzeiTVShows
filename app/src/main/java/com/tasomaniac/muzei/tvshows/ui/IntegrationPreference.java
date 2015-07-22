@@ -23,6 +23,8 @@ import android.util.AttributeSet;
 
 import com.tasomaniac.muzei.tvshows.App;
 import com.tasomaniac.muzei.tvshows.R;
+import com.tasomaniac.muzei.tvshows.util.AppInstallEnabler;
+import com.tasomaniac.muzei.tvshows.util.ContentProviderEnabler;
 
 import javax.inject.Inject;
 
@@ -33,10 +35,13 @@ public class IntegrationPreference extends CheckBoxPreference {
     @Inject PackageManager packageManager;
     @Inject ContentResolver contentResolver;
 
+    AppInstallEnabler appInstallEnabler;
+    ContentProviderEnabler contentProviderEnabler;
+
     Intent originalIntent;
     Intent alternativeIntent;
     Intent uriMissingIntent;
-    private String expectedContentUri;
+    private Uri expectedContentUri;
     private String summaryUriMissing;
 
     public IntegrationPreference(Context context) {
@@ -73,12 +78,19 @@ public class IntegrationPreference extends CheckBoxPreference {
         extractAlternativeIntent(sa);
         extractUriMissingIntent(sa);
 
-        expectedContentUri = sa.getString(R.styleable.IntegrationPreference_expectedContentUri);
+        String expectedContentUriString =
+                sa.getString(R.styleable.IntegrationPreference_expectedContentUri);
+        if (!TextUtils.isEmpty(expectedContentUriString)) {
+            expectedContentUri = Uri.parse(expectedContentUriString);
+        }
         summaryUriMissing = sa.getString(R.styleable.IntegrationPreference_summaryUriMissing);
 
         sa.recycle();
 
         setDisableDependentsState(true);
+
+        appInstallEnabler = new AppInstallEnabler(context, this);
+        contentProviderEnabler = new ContentProviderEnabler(context, this);
 
         new Handler().post(new Runnable() {
             @Override
@@ -88,8 +100,18 @@ public class IntegrationPreference extends CheckBoxPreference {
         });
     }
 
-    public String getExpectedContentUri() {
+    public Uri getExpectedContentUri() {
         return expectedContentUri;
+    }
+
+    public void resume() {
+        appInstallEnabler.resume();
+        contentProviderEnabler.resume();
+    }
+
+    public void pause() {
+        appInstallEnabler.pause();
+        contentProviderEnabler.pause();
     }
 
     public void checkState() {
@@ -99,8 +121,8 @@ public class IntegrationPreference extends CheckBoxPreference {
         }
 
         if (hasIntent(originalIntent)) {
-            if (!TextUtils.isEmpty(expectedContentUri)
-                    && hasTroublesomeProvider(Uri.parse(expectedContentUri))) {
+            if (expectedContentUri != null
+                    && hasTroublesomeProvider(expectedContentUri)) {
                 setSummaryOff(summaryUriMissing);
                 adjustPreference(uriMissingIntent, false);
             } else {
@@ -161,7 +183,7 @@ public class IntegrationPreference extends CheckBoxPreference {
         }
     }
 
-    private boolean hasTroublesomeProvider(Uri uri) {
+    private boolean hasTroublesomeProvider(@NonNull Uri uri) {
         Cursor cursor = null;
         try {
             cursor = contentResolver.query(uri,

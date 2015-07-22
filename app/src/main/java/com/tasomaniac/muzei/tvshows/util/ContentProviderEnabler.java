@@ -18,7 +18,6 @@ package com.tasomaniac.muzei.tvshows.util;
 
 import android.content.Context;
 import android.database.ContentObserver;
-import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,7 +27,7 @@ import com.tasomaniac.muzei.tvshows.ui.IntegrationPreference;
 public final class ContentProviderEnabler {
 
     private final Context mContext;
-    @Nullable private IntegrationPreference mPref;
+    private IntegrationPreference mPref;
 
     private final ContentObserver mObserver = new ContentObserver(new Handler()) {
 
@@ -46,24 +45,22 @@ public final class ContentProviderEnabler {
 
     public void resume() {
 
-        handleStateChanged();
+        if (mPref != null && mPref.getExpectedContentUri() != null) {
 
-        if (mPref != null) {
-            mContext.getContentResolver().registerContentObserver(Uri.parse(mPref.getExpectedContentUri()),
+            handleStateChanged();
+            mContext.getContentResolver().registerContentObserver(mPref.getExpectedContentUri(),
                     false, mObserver);
         }
     }
 
     public void pause() {
-        if (mPref != null) {
+        if (mPref != null && mPref.getExpectedContentUri() != null) {
             mContext.getContentResolver().unregisterContentObserver(mObserver);
         }
     }
 
     void handleStateChanged() {
-        if (mPref != null) {
-            mPref.checkState();
-        }
+        mPref.checkState();
     }
 
 }
