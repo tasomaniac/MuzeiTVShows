@@ -65,6 +65,11 @@ public class IntegrationPreference extends Preference {
 
         int errorColor = getContext().getResources().getColor(R.color.error_color);
 
+        SpannableString titleSpan =
+                new SpannableString(getTitle());
+        titleSpan.setSpan(new ForegroundColorSpan(errorColor), 0, titleSpan.length(), 0);
+        setTitle(titleSpan);
+
         SpannableString summarySpan =
                 new SpannableString(getContext().getString(alternativeSummary));
         summarySpan.setSpan(new ForegroundColorSpan(errorColor), 0, summarySpan.length(), 0);
