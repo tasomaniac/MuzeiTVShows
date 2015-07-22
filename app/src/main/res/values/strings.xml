@@ -21,11 +21,11 @@
   <string name="pref_title_seriesguide_integration">Series Guide Integration</string>
   <string name="pref_summary_seriesguide_installed">Open Series Guide to change your selected TV Shows.</string>
   <string name="pref_summary_seriesguide_not_setup">You must add TV Shows to Series Guide for this application to show their posters as wallpapers.</string>
-  <string name="pref_summary_seriesguide_not_installed">Series Guide app must be installed to get TV Shows and Movies.</string>
+  <string name="pref_summary_seriesguide_not_installed">Click here to install necessary Series Guide app for this app to select TV Show and Movie sources.</string>
 
   <string name="pref_key_muzei_integration">pref_muzei_integration</string>
   <string name="pref_title_muzei_integration">Muzei App Integration</string>
   <string name="pref_summart_muzei_installed">Open Muzei settings to select "TV Shows" as your source.</string>
-  <string name="pref_summary_muzei_not_installed">Muzei Wallpaper app must be installed to set your wallpaper.</string>
+  <string name="pref_summary_muzei_not_installed">Click here to install Muzei Wallpaper for this app to set your wallpaper.</string>
   <string name="done">Done</string>
 </resources>

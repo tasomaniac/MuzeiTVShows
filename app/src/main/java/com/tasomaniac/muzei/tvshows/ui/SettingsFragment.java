@@ -18,11 +18,8 @@ package com.tasomaniac.muzei.tvshows.ui;
 
 import android.app.backup.BackupManager;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +27,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -39,26 +35,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.tasomaniac.muzei.tvshows.App;
 import com.tasomaniac.muzei.tvshows.R;
 import com.tasomaniac.muzei.tvshows.data.SeriesGuideContract;
-
-import javax.inject.Inject;
 
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String APPLICATION_ID_MUZEI = "net.nurik.roman.muzei";
     private static final String APPLICATION_ID_SERIESGUIDE = "com.battlelancer.seriesguide";
+    private static final String ACTIVITY_NAME_ADD_TV_SHOWS =
+            "com.battlelancer.seriesguide.ui.AddActivity";
 
     private static final Intent INTENT_PLAY_STORE_MUZEI = new Intent(Intent.ACTION_VIEW,
             Uri.parse("market://details?id=" + APPLICATION_ID_MUZEI));
     private static final Intent INTENT_PLAY_STORE_SERIESGUIDE = new Intent(Intent.ACTION_VIEW,
             Uri.parse("market://details?id=" + APPLICATION_ID_SERIESGUIDE));
-
-    @Inject
-    PackageManager packageManager;
-    @Inject
-    ContentResolver contentResolver;
 
     public SettingsFragment() {
     }
@@ -66,7 +56,6 @@ public class SettingsFragment extends PreferenceFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get(getActivity()).component().inject(this);
 
         // Add 'advanced' preferences.
         addPreferencesFromResource(R.xml.pref_general);
@@ -77,75 +66,37 @@ public class SettingsFragment extends PreferenceFragment
 //        bindPreferenceSummaryToValue(
 //                findPreference(getString(R.string.pref_key_only_unwatched)));
 
+        final Preference settingPref = findPreference(R.string.pref_key_settings);
+
         //Adjust Muzei Application Integration
-        Preference muzeiPref = findPreference(R.string.pref_key_muzei_integration);
-        if (hasTroublesomeIntent(muzeiPref)) {
-            adjustPreference(muzeiPref,
+        IntegrationPreference muzeiPref =
+                (IntegrationPreference) findPreference(R.string.pref_key_muzei_integration);
+        if (muzeiPref != null && muzeiPref.hasTroublesomeIntent()) {
+            muzeiPref.adjustPreference(settingPref,
                     INTENT_PLAY_STORE_MUZEI,
                     R.string.pref_summary_muzei_not_installed);
         }
 
         //Adjust Series Guide Application Integration.
-        Preference seriesguidePref = findPreference(R.string.pref_key_seriesguide_integration);
-        if (hasTroublesomeIntent(seriesguidePref)) {
-            adjustPreference(seriesguidePref,
-                    INTENT_PLAY_STORE_SERIESGUIDE,
-                    R.string.pref_summary_seriesguide_not_installed);
+        IntegrationPreference seriesguidePref =
+                (IntegrationPreference) findPreference(R.string.pref_key_seriesguide_integration);
+        if (seriesguidePref != null) {
+            if (seriesguidePref.hasTroublesomeIntent()) {
+                seriesguidePref.adjustPreference(settingPref,
+                        INTENT_PLAY_STORE_SERIESGUIDE,
+                        R.string.pref_summary_seriesguide_not_installed);
 
-        } else if (hasTroublesomeProvider(SeriesGuideContract.Shows.CONTENT_URI)) {
-            //Adjust it again if Series Guide is installed but has no TV Shows in it.
-            Intent intent = new Intent();
-            intent.setComponent(new ComponentName(APPLICATION_ID_SERIESGUIDE,
-                    "com.battlelancer.seriesguide.ui.AddActivity"));
-            adjustPreference(seriesguidePref,
-                    intent,
-                    R.string.pref_summary_seriesguide_not_setup);
-        }
-
-
-    }
-
-    private boolean hasTroublesomeProvider(Uri uri) {
-        Cursor cursor = null;
-        try {
-            cursor = contentResolver.query(uri,
-                    new String[]{BaseColumns._ID}, null, null, null);
-            return cursor == null || cursor.getCount() == 0;
-        } finally {
-            if (cursor != null) {
-                cursor.close();
+            } else if (seriesguidePref.hasTroublesomeProvider(SeriesGuideContract.Shows.CONTENT_URI)) {
+                //Adjust it again if Series Guide is installed but has no TV Shows in it.
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName(APPLICATION_ID_SERIESGUIDE,
+                        ACTIVITY_NAME_ADD_TV_SHOWS));
+                seriesguidePref.adjustPreference(settingPref,
+                        intent,
+                        R.string.pref_summary_seriesguide_not_setup);
             }
         }
-    }
 
-    private boolean hasTroublesomeIntent(@Nullable Preference pref) {
-        if (pref == null) {
-            return true;
-        }
-
-        Intent intent = pref.getIntent();
-        return intent == null
-                || packageManager.resolveActivity(intent, 0) == null;
-    }
-
-    private void adjustPreference(@Nullable Preference pref,
-                                  @NonNull Intent alternativeIntent,
-                                  @StringRes int alternativeSummary) {
-        if (pref == null) {
-            return;
-        }
-
-        pref.setIntent(alternativeIntent);
-        pref.setSummary(alternativeSummary);
-
-        if (hasTroublesomeIntent(pref)) {
-            pref.setIntent(null);
-        }
-
-        final Preference settingPref = findPreference(R.string.pref_key_settings);
-        if (settingPref != null) {
-            settingPref.setEnabled(false);
-        }
     }
 
     @Nullable

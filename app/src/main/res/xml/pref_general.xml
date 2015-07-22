@@ -30,7 +30,7 @@
   <PreferenceCategory android:title="@string/pref_title_integrations">
 
     <!-- Muzei App Check Preference-->
-    <Preference
+    <com.tasomaniac.muzei.tvshows.ui.IntegrationPreference
       android:key="@string/pref_key_muzei_integration"
       android:persistent="false"
       android:summary="@string/pref_summart_muzei_installed"
@@ -38,17 +38,17 @@
       <intent
         android:targetClass="com.google.android.apps.muzei.settings.SettingsActivity"
         android:targetPackage="net.nurik.roman.muzei"/>
-    </Preference>
+    </com.tasomaniac.muzei.tvshows.ui.IntegrationPreference>
 
     <!-- Series Guide App Check Preference -->
-    <Preference
+    <com.tasomaniac.muzei.tvshows.ui.IntegrationPreference
       android:key="@string/pref_key_seriesguide_integration"
       android:persistent="false"
       android:summary="@string/pref_summary_seriesguide_installed"
       android:title="@string/pref_title_seriesguide_integration">
       <intent
         android:action="com.battlelancer.seriesguide.api.action.VIEW_EPISODE"/>
-    </Preference>
+    </com.tasomaniac.muzei.tvshows.ui.IntegrationPreference>
 
   </PreferenceCategory>
 
