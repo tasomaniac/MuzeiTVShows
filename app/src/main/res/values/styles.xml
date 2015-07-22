@@ -49,12 +49,4 @@
     <!--<item name="android:dialogLayout">@layout/preference_dialog_edittext</item>-->
   </style>
 
-  <style name="ThemeOverlay.AppBar.White" parent="ThemeOverlay.AppCompat.ActionBar">
-    <item name="android:textColorPrimary">#fff</item>
-    <item name="colorControlNormal">#fff</item>
-    <item name="colorControlHighlight">#fff</item>
-  </style>
-
-  <style name="ThemeOverlay.AppBar.White.Popup" parent="ThemeOverlay.AppCompat.Light"/>
-
 </resources>

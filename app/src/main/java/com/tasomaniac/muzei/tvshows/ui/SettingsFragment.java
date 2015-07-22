@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -36,6 +37,7 @@ import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.tasomaniac.muzei.tvshows.App;
 import com.tasomaniac.muzei.tvshows.R;
@@ -89,10 +91,9 @@ public class SettingsFragment extends PreferenceFragment
             adjustPreference(seriesguidePref,
                     INTENT_PLAY_STORE_SERIESGUIDE,
                     R.string.pref_summary_seriesguide_not_installed);
-        }
 
-        //Adjust it again it Series Guide is installed but has no TV Shows in it.
-        if (hasTroublesomeProvider(SeriesGuideContract.Shows.CONTENT_URI)) {
+        } else if (hasTroublesomeProvider(SeriesGuideContract.Shows.CONTENT_URI)) {
+            //Adjust it again if Series Guide is installed but has no TV Shows in it.
             Intent intent = new Intent();
             intent.setComponent(new ComponentName(APPLICATION_ID_SERIESGUIDE,
                     "com.battlelancer.seriesguide.ui.AddActivity"));
@@ -100,6 +101,8 @@ public class SettingsFragment extends PreferenceFragment
                     intent,
                     R.string.pref_summary_seriesguide_not_setup);
         }
+
+
     }
 
     private boolean hasTroublesomeProvider(Uri uri) {
@@ -131,8 +134,13 @@ public class SettingsFragment extends PreferenceFragment
         if (pref == null) {
             return;
         }
+
         pref.setIntent(alternativeIntent);
         pref.setSummary(alternativeSummary);
+
+        if (hasTroublesomeIntent(pref)) {
+            pref.setIntent(null);
+        }
 
         final Preference settingPref = findPreference(R.string.pref_key_settings);
         if (settingPref != null) {
@@ -162,7 +170,12 @@ public class SettingsFragment extends PreferenceFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_simple_prefs, container, false);
+        View view = inflater.inflate(R.layout.fragment_simple_prefs, container, false);
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            listView.setNestedScrollingEnabled(true);
+        }
+        return view;
     }
 
     @Override
