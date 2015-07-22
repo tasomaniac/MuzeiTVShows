@@ -27,4 +27,5 @@
   <string name="pref_title_muzei_integration">Muzei App Integration</string>
   <string name="pref_summart_muzei_installed">Open Muzei settings to select "TV Shows" as your source.</string>
   <string name="pref_summary_muzei_not_installed">Muzei Wallpaper app must be installed to set your wallpaper.</string>
+  <string name="done">Done</string>
 </resources>
