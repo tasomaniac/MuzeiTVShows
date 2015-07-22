@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="IntegrationPreference">
+    <attr name="alternativeIntentData" format="string|reference" />
+    <attr name="alternativeIntentMimeType" format="string|reference" />
+    <attr name="alternativeIntentAction" format="string|reference" />
+    <attr name="alternativeIntentTargetPackage" format="string|reference" />
+    <attr name="alternativeIntentTargetClass" format="string|reference" />
+
+    <attr name="expectedContentUri" format="string|reference" />
+    <attr name="summaryUriMissing" format="string|reference" />
+    <attr name="uriMissingIntentData" format="string|reference" />
+    <attr name="uriMissingIntentMimeType" format="string|reference" />
+    <attr name="uriMissingIntentAction" format="string|reference" />
+    <attr name="uriMissingIntentTargetPackage" format="string|reference" />
+    <attr name="uriMissingIntentTargetClass" format="string|reference" />
+  </declare-styleable>
+
+</resources>

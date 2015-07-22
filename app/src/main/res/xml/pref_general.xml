@@ -14,7 +14,8 @@
   limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <PreferenceCategory
     android:key="@string/pref_key_settings"
@@ -33,22 +34,34 @@
     <com.tasomaniac.muzei.tvshows.ui.IntegrationPreference
       android:key="@string/pref_key_muzei_integration"
       android:persistent="false"
-      android:summary="@string/pref_summart_muzei_installed"
-      android:title="@string/pref_title_muzei_integration">
+      android:defaultValue="true"
+      android:summaryOn="@string/pref_summart_muzei_installed"
+      android:summaryOff="@string/pref_summary_muzei_not_installed"
+      android:title="@string/pref_title_muzei_integration"
+      app:alternativeIntentAction="android.intent.action.VIEW"
+      app:alternativeIntentData="market://details?id=net.nurik.roman.muzei">
       <intent
         android:targetClass="com.google.android.apps.muzei.settings.SettingsActivity"
         android:targetPackage="net.nurik.roman.muzei"/>
     </com.tasomaniac.muzei.tvshows.ui.IntegrationPreference>
 
-    <!-- Series Guide App Check Preference -->
     <com.tasomaniac.muzei.tvshows.ui.IntegrationPreference
       android:key="@string/pref_key_seriesguide_integration"
       android:persistent="false"
-      android:summary="@string/pref_summary_seriesguide_installed"
-      android:title="@string/pref_title_seriesguide_integration">
+      android:defaultValue="true"
+      android:summaryOn="@string/pref_summary_seriesguide_installed"
+      android:summaryOff="@string/pref_summary_seriesguide_not_installed"
+      android:title="@string/pref_title_seriesguide_integration"
+      app:alternativeIntentAction="android.intent.action.VIEW"
+      app:alternativeIntentData="market://details?id=com.battlelancer.seriesguide"
+      app:expectedContentUri="content://com.battlelancer.seriesguide.provider/shows"
+      app:uriMissingIntentTargetClass="com.battlelancer.seriesguide.ui.AddActivity"
+      app:uriMissingIntentTargetPackage="com.battlelancer.seriesguide"
+      app:summaryUriMissing="@string/pref_summary_seriesguide_not_setup">
       <intent
         android:action="com.battlelancer.seriesguide.api.action.VIEW_EPISODE"/>
     </com.tasomaniac.muzei.tvshows.ui.IntegrationPreference>
+    <!-- Series Guide App Check Preference -->
 
   </PreferenceCategory>
 

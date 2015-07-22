@@ -17,10 +17,7 @@
 package com.tasomaniac.muzei.tvshows.ui;
 
 import android.app.backup.BackupManager;
-import android.content.ComponentName;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -36,19 +33,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.tasomaniac.muzei.tvshows.R;
-import com.tasomaniac.muzei.tvshows.data.SeriesGuideContract;
 
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String APPLICATION_ID_MUZEI = "net.nurik.roman.muzei";
     private static final String APPLICATION_ID_SERIESGUIDE = "com.battlelancer.seriesguide";
     private static final String ACTIVITY_NAME_ADD_TV_SHOWS =
             "com.battlelancer.seriesguide.ui.AddActivity";
-
-    private static final Intent INTENT_PLAY_STORE_MUZEI = new Intent(Intent.ACTION_VIEW,
-            Uri.parse("market://details?id=" + APPLICATION_ID_MUZEI));
-    private static final Intent INTENT_PLAY_STORE_SERIESGUIDE = new Intent(Intent.ACTION_VIEW,
-            Uri.parse("market://details?id=" + APPLICATION_ID_SERIESGUIDE));
 
     public SettingsFragment() {
     }
@@ -65,37 +55,6 @@ public class SettingsFragment extends PreferenceFragment
         // to reflect the new value, per the Android Design guidelines.
 //        bindPreferenceSummaryToValue(
 //                findPreference(getString(R.string.pref_key_only_unwatched)));
-
-        final Preference settingPref = findPreference(R.string.pref_key_settings);
-
-        //Adjust Muzei Application Integration
-        IntegrationPreference muzeiPref =
-                (IntegrationPreference) findPreference(R.string.pref_key_muzei_integration);
-        if (muzeiPref != null && muzeiPref.hasTroublesomeIntent()) {
-            muzeiPref.adjustPreference(settingPref,
-                    INTENT_PLAY_STORE_MUZEI,
-                    R.string.pref_summary_muzei_not_installed);
-        }
-
-        //Adjust Series Guide Application Integration.
-        IntegrationPreference seriesguidePref =
-                (IntegrationPreference) findPreference(R.string.pref_key_seriesguide_integration);
-        if (seriesguidePref != null) {
-            if (seriesguidePref.hasTroublesomeIntent()) {
-                seriesguidePref.adjustPreference(settingPref,
-                        INTENT_PLAY_STORE_SERIESGUIDE,
-                        R.string.pref_summary_seriesguide_not_installed);
-
-            } else if (seriesguidePref.hasTroublesomeProvider(SeriesGuideContract.Shows.CONTENT_URI)) {
-                //Adjust it again if Series Guide is installed but has no TV Shows in it.
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(APPLICATION_ID_SERIESGUIDE,
-                        ACTIVITY_NAME_ADD_TV_SHOWS));
-                seriesguidePref.adjustPreference(settingPref,
-                        intent,
-                        R.string.pref_summary_seriesguide_not_setup);
-            }
-        }
 
     }
 
