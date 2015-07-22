@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -32,6 +33,8 @@ public class IntegrationPreference extends CheckBoxPreference {
     Intent originalIntent;
     Intent alternativeIntent;
     Intent uriMissingIntent;
+    private String expectedContentUri;
+    private String summaryUriMissing;
 
     public IntegrationPreference(Context context) {
         super(context);
@@ -61,16 +64,14 @@ public class IntegrationPreference extends CheckBoxPreference {
         setWidgetLayoutResource(R.layout.preference_widget_error);
         setDefaultValue(true);
 
-        originalIntent = getIntent();
-
         final TypedArray sa = context.obtainStyledAttributes(attrs,
                 R.styleable.IntegrationPreference);
 
         extractAlternativeIntent(sa);
         extractUriMissingIntent(sa);
 
-        final String expectedContentUri = sa.getString(R.styleable.IntegrationPreference_expectedContentUri);
-        final String summaryUriMissing = sa.getString(R.styleable.IntegrationPreference_summaryUriMissing);
+        expectedContentUri = sa.getString(R.styleable.IntegrationPreference_expectedContentUri);
+        summaryUriMissing = sa.getString(R.styleable.IntegrationPreference_summaryUriMissing);
 
         sa.recycle();
 
@@ -79,30 +80,45 @@ public class IntegrationPreference extends CheckBoxPreference {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-
-                if (hasTroublesomeIntent()) {
-                    adjustPreference(alternativeIntent);
-                } else if (!TextUtils.isEmpty(expectedContentUri)
-                        && hasTroublesomeProvider(Uri.parse(expectedContentUri))) {
-                    setSummaryOff(summaryUriMissing);
-                    adjustPreference(uriMissingIntent);
-                }
+                checkState();
             }
         });
+    }
+
+    public void checkState() {
+
+        if (originalIntent == null) {
+            originalIntent = getIntent();
+        }
+
+        if (hasIntent(originalIntent)) {
+            if (!TextUtils.isEmpty(expectedContentUri)
+                    && hasTroublesomeProvider(Uri.parse(expectedContentUri))) {
+                setSummaryOff(summaryUriMissing);
+                adjustPreference(uriMissingIntent, false);
+            } else {
+                adjustPreference(originalIntent, true);
+            }
+        } else {
+            adjustPreference(alternativeIntent, false);
+        }
     }
 
     private void extractAlternativeIntent(TypedArray sa) {
         //Parse the alternative Intent
         alternativeIntent = new Intent();
 
-        alternativeIntent.setAction(sa.getString(R.styleable.IntegrationPreference_alternativeIntentAction));
+        alternativeIntent.setAction(
+                sa.getString(R.styleable.IntegrationPreference_alternativeIntentAction));
 
         String data = sa.getString(R.styleable.IntegrationPreference_alternativeIntentData);
         String mimeType = sa.getString(R.styleable.IntegrationPreference_alternativeIntentMimeType);
         alternativeIntent.setDataAndType(data != null ? Uri.parse(data) : null, mimeType);
 
-        String packageName = sa.getString(R.styleable.IntegrationPreference_alternativeIntentTargetPackage);
-        String className = sa.getString(R.styleable.IntegrationPreference_alternativeIntentTargetClass);
+        String packageName =
+                sa.getString(R.styleable.IntegrationPreference_alternativeIntentTargetPackage);
+        String className =
+                sa.getString(R.styleable.IntegrationPreference_alternativeIntentTargetClass);
         if (packageName != null && className != null) {
             alternativeIntent.setComponent(new ComponentName(packageName, className));
         }
@@ -112,14 +128,17 @@ public class IntegrationPreference extends CheckBoxPreference {
         //Parse the URI Missing Intent
         uriMissingIntent = new Intent();
 
-        uriMissingIntent.setAction(sa.getString(R.styleable.IntegrationPreference_uriMissingIntentAction));
+        uriMissingIntent.setAction(
+                sa.getString(R.styleable.IntegrationPreference_uriMissingIntentAction));
 
         String data = sa.getString(R.styleable.IntegrationPreference_uriMissingIntentData);
         String mimeType = sa.getString(R.styleable.IntegrationPreference_uriMissingIntentMimeType);
         uriMissingIntent.setDataAndType(data != null ? Uri.parse(data) : null, mimeType);
 
-        String packageName = sa.getString(R.styleable.IntegrationPreference_uriMissingIntentTargetPackage);
-        String className = sa.getString(R.styleable.IntegrationPreference_uriMissingIntentTargetClass);
+        String packageName =
+                sa.getString(R.styleable.IntegrationPreference_uriMissingIntentTargetPackage);
+        String className =
+                sa.getString(R.styleable.IntegrationPreference_uriMissingIntentTargetClass);
         if (packageName != null && className != null) {
             uriMissingIntent.setComponent(new ComponentName(packageName, className));
         }
@@ -135,7 +154,7 @@ public class IntegrationPreference extends CheckBoxPreference {
         }
     }
 
-    public boolean hasTroublesomeProvider(Uri uri) {
+    private boolean hasTroublesomeProvider(Uri uri) {
         Cursor cursor = null;
         try {
             cursor = contentResolver.query(uri,
@@ -148,10 +167,9 @@ public class IntegrationPreference extends CheckBoxPreference {
         }
     }
 
-    public boolean hasTroublesomeIntent() {
-        Intent intent = getIntent();
-        return intent == null
-                || packageManager.resolveActivity(intent, 0) == null;
+    private boolean hasIntent(@Nullable Intent intent) {
+        return intent != null
+                && packageManager.resolveActivity(intent, 0) != null;
     }
 
     @Override
@@ -178,13 +196,14 @@ public class IntegrationPreference extends CheckBoxPreference {
         return errorSpan;
     }
 
-    public void adjustPreference(Intent intentOff) {
+    private void adjustPreference(Intent intentOff, boolean checked) {
         setIntent(intentOff);
-        setChecked(false);
+        setChecked(checked);
 
-        if (hasTroublesomeIntent()) {
+        if (!hasIntent(intentOff)) {
             setIntent(null);
         }
+        //TODO
 //        if (getDependency() != null) {
 //            Preference dependencyPref = getPreferenceManager().findPreference(getDependency());
 //            if (dependencyPref != null) {

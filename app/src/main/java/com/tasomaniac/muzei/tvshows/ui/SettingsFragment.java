@@ -33,12 +33,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.tasomaniac.muzei.tvshows.R;
+import com.tasomaniac.muzei.tvshows.util.AppInstallEnabler;
 
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String APPLICATION_ID_SERIESGUIDE = "com.battlelancer.seriesguide";
-    private static final String ACTIVITY_NAME_ADD_TV_SHOWS =
-            "com.battlelancer.seriesguide.ui.AddActivity";
+
+    AppInstallEnabler appInstallEnabler;
 
     public SettingsFragment() {
     }
@@ -56,6 +56,9 @@ public class SettingsFragment extends PreferenceFragment
 //        bindPreferenceSummaryToValue(
 //                findPreference(getString(R.string.pref_key_only_unwatched)));
 
+        appInstallEnabler = new AppInstallEnabler(getActivity(),
+                (IntegrationPreference) findPreference(R.string.pref_key_muzei_integration),
+                (IntegrationPreference) findPreference(R.string.pref_key_seriesguide_integration));
     }
 
     @Nullable
@@ -68,6 +71,9 @@ public class SettingsFragment extends PreferenceFragment
         super.onResume();
         getPreferenceManager().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
+        if (appInstallEnabler != null) {
+            appInstallEnabler.resume();
+        }
     }
 
     @Override
@@ -75,6 +81,9 @@ public class SettingsFragment extends PreferenceFragment
         super.onPause();
         getPreferenceManager().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
+        if (appInstallEnabler != null) {
+            appInstallEnabler.pause();
+        }
     }
 
     @Override
