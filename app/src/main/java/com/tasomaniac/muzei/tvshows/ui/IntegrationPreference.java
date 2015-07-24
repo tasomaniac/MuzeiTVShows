@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
@@ -91,13 +90,21 @@ public class IntegrationPreference extends CheckBoxPreference {
 
         appInstallEnabler = new AppInstallEnabler(context, this);
         contentProviderEnabler = new ContentProviderEnabler(context, this);
+    }
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                checkState();
+    @Override
+    protected void onAttachedToActivity() {
+        super.onAttachedToActivity();
+        originalIntent = getIntent();
+
+        if (originalIntent != null && !hasIntent(alternativeIntent)) {
+            ComponentName component = originalIntent.getComponent();
+            if (component != null) {
+                alternativeIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=" + component.getPackageName()));
             }
-        });
+        }
+        checkState();
     }
 
     public Uri getExpectedContentUri() {
@@ -115,11 +122,6 @@ public class IntegrationPreference extends CheckBoxPreference {
     }
 
     public void checkState() {
-
-        if (originalIntent == null) {
-            originalIntent = getIntent();
-        }
-
         if (hasIntent(originalIntent)) {
             if (expectedContentUri != null
                     && hasTroublesomeProvider(expectedContentUri)) {

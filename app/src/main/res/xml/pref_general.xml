@@ -37,9 +37,7 @@
       android:defaultValue="true"
       android:summaryOn="@string/pref_summart_muzei_installed"
       android:summaryOff="@string/pref_summary_muzei_not_installed"
-      android:title="@string/pref_title_muzei_integration"
-      app:alternativeIntentAction="android.intent.action.VIEW"
-      app:alternativeIntentData="market://details?id=net.nurik.roman.muzei">
+      android:title="@string/pref_title_muzei_integration">
       <intent
         android:targetClass="com.google.android.apps.muzei.settings.SettingsActivity"
         android:targetPackage="net.nurik.roman.muzei"/>
