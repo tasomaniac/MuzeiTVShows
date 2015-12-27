@@ -26,7 +26,7 @@ allprojects {
 }
 
 ext {
-    isTravis = "true".equals(System.getenv("TRAVIS"))
+    ci = "true".equals(System.getenv("CI"))
     preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
     versionMajor = 0
